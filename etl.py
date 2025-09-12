@@ -1,4 +1,4 @@
-import conn as con 
+import services as con 
 import pandas as pd 
 
 df = pd.DataFrame(con.dados)
