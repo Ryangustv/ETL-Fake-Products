@@ -1,0 +1,6 @@
+requests
+pandas
+os 
+json
+psycopg2
+datetime
