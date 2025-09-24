@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import datetime
 
-def main():
+def extract():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     raw_data_dir = os.path.join(base_dir, '../../data/raw')
 
@@ -38,10 +38,11 @@ def main():
             json.dump(weather_data, json_file, indent=4)
         print(f"Dados extraidos e salvos em {file_path}")
 
+        return raw_data_dir
     #Lançando exceções
     except req.exceptions.RequestException as e:
         print(f"Erro ao extrair dados da API: {e}")
     except json.JSONDecodeError as e:
         print(f"Erro ao decodificar JSON: {e}")
 if __name__ == "__main__":
-    main()
+    extract()
