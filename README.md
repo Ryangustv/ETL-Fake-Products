@@ -51,7 +51,7 @@ source venv/bin/activate
 ```
 
 ### 3. Instalar dependências
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ### 4. Após a instalação:
   1. Crie um novo banco de dados.
@@ -59,4 +59,4 @@ pip install -r requirements.txt
   3. Configure usuário, senha, host e porta no arquivo `config/db_connection.py`.
 
 ### 5. Rodando o projeto.
-python main.py
+`python main.py`
