@@ -36,7 +36,8 @@ def extract():
         # Salvando os dados extraídos em um arquivo JSON na pasta data/raw
         with open(file_path, 'w') as json_file:
             json.dump(weather_data, json_file, indent=4)
-        print(f"Dados extraidos e salvos em {file_path}")
+        print(f"Dados extraidos e salvos em data/raw")
+        print("===================================")
 
         return raw_data_dir
     #Lançando exceções

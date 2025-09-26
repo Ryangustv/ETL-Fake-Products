@@ -12,6 +12,7 @@ from config.db_connection import my_connection as conn
 
 def main():
     print("Iniciando pipeline de ETL completo!")
+    print("===================================")
 
     raw_df = extract()
 
@@ -27,6 +28,7 @@ def main():
     load = load_data(transformed, conn)
 
     print("Pipeline de ETL finalizado!")
+    print("====================================")
 
 if __name__ == "__main__":
     main()
