@@ -2,8 +2,15 @@ import psycopg2 as pg
 import pandas as pd
 from config.db_connection import my_connection
 from config.db_connection import DB_PARAM
+import json
 
 processed_path = 'data/processed/weather_data_transformed.json'
+
+
+with open(processed_path, "r", encoding="utf-8") as f:
+   data = json.load(f)
+
+df = pd.DataFrame(data)
 
 #Tentando ler o DataFrame
 try: 
@@ -27,12 +34,21 @@ def load_data(df, db_params):
                                 """, (row['categoria'],)
                                 )
                     id_categoria = cur.fetchone()[0] 
+                    
+                    #Validação por descrição do produto para evitar duplicidade
+                    cur.execute("select nome_produto from produto where nome_produto = %s", (row['nome'],))
+                    produto_existente = cur.fetchone()
+                    
+                    if produto_existente:
+                        print(f"Produto já existente... inserção ignorada.")
+                        continue
 
                     #Inserindo dados na tabela 'Produto'
                     cur.execute("""
                     INSERT INTO produto(codigo, nome_produto, descricao, preco_base, preco_promocional, id_categoria)
-                    VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (codigo) DO UPDATE SET codigo = EXCLUDED.codigo
-                    returning id;
+                    VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (nome_produto) DO UPDATE SET nome_produto = EXCLUDED.nome_produto,
+                                                                                            codigo = EXCLUDED.codigo
+                                                                                            returning id;
                                 """, (row['codigo'],
                                       row['nome'],
                                       row['descricao'],
@@ -55,7 +71,8 @@ def load_data(df, db_params):
                     #Inserindo dados na tabela 'Promocao'
                     cur.execute("""
                     INSERT INTO promocao(produto_id, tipo_promocao, fonte_api)
-                    VALUES (%s, %s, %s)
+                    VALUES (%s, %s, %s) ON CONFLICT (produto_id) DO UPDATE SET produto_id = EXCLUDED.produto_id
+                    returning id;
                                 """,(
                                     id_produto,
                                     row['tipo_promo'],

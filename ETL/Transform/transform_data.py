@@ -2,6 +2,7 @@ import pandas as pd
 import os 
 import json 
 import random
+import numpy as np 
 
 def transform(df: pd.DataFrame):
     #Criando diretorio para os dados processados.
@@ -39,8 +40,7 @@ def transform(df: pd.DataFrame):
         df_transformed = df_transformed.drop_duplicates(subset=['categoria'])
         
         #Inserindo codigos aleatórios
-        cod_random = random.randint(1000, 9999)
-        df_transformed['codigo'] = cod_random
+        df_transformed['codigo'] = np.random.randint(0, 9999, size=len(df_transformed))
 
         df_transformed['tipo_promo'] = r"10% de desconto"
 
@@ -62,6 +62,7 @@ def transform(df: pd.DataFrame):
 
         #Dropando duplicatas
         df_transformed = df_transformed.drop(columns=['description', 'price', 'title', 'category'])
+
 
         #Salvando modificações no JSON antes de ser salvo para LOAD.
         #df_transformed.to_json('../../data/processed/weather_data_transformed.json', orient='records', force_ascii=False)
