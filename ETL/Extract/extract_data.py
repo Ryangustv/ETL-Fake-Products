@@ -24,11 +24,8 @@ def extract():
         #Convertendo a resposta para JSON
         weather_data = response.json() 
 
-        #Formata a data e hora atual
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") 
-
-         #Nome do arquivo com timestamp
-        filename = f"weather_data_{timestamp}.json"
+         #Nome do arquivo, sobrescrevendo o arquivo anterior
+        filename = "weather_data.json"
 
         #Caminho do arquivo
         file_path = os.path.join(raw_data_dir, filename) 

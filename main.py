@@ -14,6 +14,7 @@ def main():
     print("Iniciando pipeline de ETL completo!")
     print("===================================")
 
+
     raw_df = extract()
 
     if raw_df is None:

@@ -1,0 +1,13 @@
+cron:
+- description: "Extrair dados"
+  interval: 1
+  unit: "minutes"
+
+- description: "transformar dados"
+  interval: 1
+  unit: "minutes"
+
+- description: "carregar dados"
+  interval: 1
+  unit: "minutes"
+

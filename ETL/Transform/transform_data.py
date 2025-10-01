@@ -72,7 +72,7 @@ def transform(df: pd.DataFrame):
         df_transformed.to_json(output_filepath,
                               index=False,
                               orient='records',
-                              indent=4
+                              indent=6
                               )
         
         print(f"Transformação concluída. Dados salvos em data/processed")
