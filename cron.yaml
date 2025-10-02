@@ -1,13 +1,13 @@
 cron:
 - description: "Extrair dados"
-  interval: 1
-  unit: "minutes"
+  interval: 10
+  unit: "seconds"
 
 - description: "transformar dados"
-  interval: 1
-  unit: "minutes"
+  interval: 15
+  unit: "seconds"
 
 - description: "carregar dados"
-  interval: 1
-  unit: "minutes"
+  interval: 20
+  unit: "seconds"
 

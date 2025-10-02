@@ -1,11 +1,3 @@
-CREATE TABLE IF NOT EXISTS promocao(
-id SERIAL PRIMARY KEY,
-produto_id INTEGER UNIQUE,
-tipo_promocao varchar(45) not null,
-fonte_api varchar(45) not null,
-CONSTRAINT produto_id FOREIGN KEY (produto_id) REFERENCES produto(id)
-);
-
 CREATE TABLE IF NOT EXISTS categoria(
 id SERIAL PRIMARY KEY,
 nome VARCHAR(100) NOT NULL UNIQUE
@@ -29,4 +21,16 @@ quantidade_classificacao integer not null,
 nota_media numeric(10,2) not null,
 CONSTRAINT produto_id FOREIGN KEY (produto_id) REFERENCES produto(id)
 );
+
+CREATE TABLE IF NOT EXISTS promocao(
+id SERIAL PRIMARY KEY,
+produto_id INTEGER UNIQUE,
+tipo_promocao varchar(45) not null,
+fonte_api varchar(45) not null,
+CONSTRAINT produto_id FOREIGN KEY (produto_id) REFERENCES produto(id)
+);
+
+
+
+
 

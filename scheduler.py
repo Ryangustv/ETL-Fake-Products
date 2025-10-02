@@ -23,7 +23,7 @@ def run_etl():
     
     transformed = transform(raw_df)
 
-    load = load_data(transformed, conn)
+    load_data(transformed, conn)
 
 
 for jobs in cron["cron"]:

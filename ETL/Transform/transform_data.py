@@ -18,16 +18,17 @@ def transform(df: pd.DataFrame):
         if not raw_files:
             raise FileNotFoundError("Nenhum arquivo JSON encontrado na pasta data/raw")
         
-        latest_file = max(raw_files, key=lambda f: os.path.getmtime(os.path.join(raw_data_dir, f)))
-        input_filepath = os.path.join(raw_data_dir, latest_file)
+        all_data = []
+
+        for file_name in raw_files:
+            input_filepath = os.path.join(raw_data_dir, file_name)
+            with open(input_filepath, 'r') as file:
+                data = json.load(file)
+                all_data.extend(data)
+
+        df_transformed = pd.DataFrame(all_data)        
 
         print(f"Iniciando transformação de dados ...")
-
-        with open(input_filepath, 'r') as file:
-            weather_data_raw = file.read()
-           
-        raw_data = json.loads(weather_data_raw)
-        df_transformed = pd.DataFrame(raw_data)
 
 
         #Tratando dados referente a coluna 'categoria'
@@ -37,7 +38,7 @@ def transform(df: pd.DataFrame):
             "men's clothing": "Roupas Masculinas",
             "electronics": "Eletronicos"
         })
-        df_transformed = df_transformed.drop_duplicates(subset=['categoria'])
+        #df_transformed = df_transformed.drop_duplicates(subset=['categoria'])
         
         #Inserindo codigos aleatórios
         df_transformed['codigo'] = np.random.randint(0, 9999, size=len(df_transformed))
@@ -72,7 +73,7 @@ def transform(df: pd.DataFrame):
         df_transformed.to_json(output_filepath,
                               index=False,
                               orient='records',
-                              indent=6
+                              indent=4
                               )
         
         print(f"Transformação concluída. Dados salvos em data/processed")

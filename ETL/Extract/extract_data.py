@@ -1,8 +1,9 @@
 import requests as req
 import json
-import pandas as pd 
 import os
-import datetime
+import random
+
+
 
 def extract():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -11,18 +12,19 @@ def extract():
     os.makedirs(raw_data_dir, exist_ok=True)
 
     url = "https://fakestoreapi.com/products"
-
+    print("===================================")
     print("Iniciando extracao de dados da API...")
 
     try:
         #Realizando uma requisição do método GET para a API
         response = req.get(url, headers={'Accept': 'Application/json'})
 
-        #Exceção para erros HTTP
-        response.raise_for_status() 
+        all_products = response.json()
 
-        #Convertendo a resposta para JSON
-        weather_data = response.json() 
+        sample = random.sample(all_products, 5)
+
+        #Exceção para erros HTTP
+        response.raise_for_status()  
 
          #Nome do arquivo, sobrescrevendo o arquivo anterior
         filename = "weather_data.json"
@@ -32,7 +34,7 @@ def extract():
 
         # Salvando os dados extraídos em um arquivo JSON na pasta data/raw
         with open(file_path, 'w') as json_file:
-            json.dump(weather_data, json_file, indent=4)
+            json.dump(sample, json_file, indent=4)
         print(f"Dados extraidos e salvos em data/raw")
         print("===================================")
 

@@ -26,7 +26,7 @@ def main():
         return
     
     transformed = transform(raw_df)
-    load = load_data(transformed, conn)
+    load_data(transformed, conn)
 
     print("Pipeline de ETL finalizado!")
     print("====================================")
