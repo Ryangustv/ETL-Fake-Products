@@ -11,6 +11,11 @@ with open("cron.yaml", "r", encoding="utf-8") as f:
     cron = yaml.safe_load(f)
 
 def run_etl():
+    if not conn:
+        print("Conexão inválida. Encerrando processo de carga.")
+        return
+
+    print("Iniciando extração dos dados")
     raw_df = extract()
 
     if raw_df is None:
@@ -21,23 +26,18 @@ def run_etl():
         print("Nenhum dado a ser extraido no momento.")
         return
     
+    print("Iniciando transformação dos dados")
     transformed = transform(raw_df)
 
+    print("Iniciando carga dos dados")
     load_data(transformed, conn)
 
 
 for jobs in cron["cron"]:
-    if jobs["description"] == "Extrair dados":
-        getattr(schedule.every(jobs["interval"]), jobs["unit"]).do(extract)
-        print(f"Cron job agendado: {jobs['description']} a cada {jobs['interval']} {jobs['unit']}")
-    elif jobs["description"] == "transformar dados":
-        getattr(schedule.every(jobs["interval"]), jobs["unit"]).do(lambda: transform(df=extract()))
-        print(f"Cron job agendado: {jobs['description']} a cada {jobs['interval']} {jobs['unit']}")
-    elif jobs["description"] == "carregar dados":
+    if jobs["description"] == "carregar dados":
         getattr(schedule.every(jobs["interval"]), jobs["unit"]).do(run_etl)
         print(f"Cron job agendado: {jobs['description']} a cada {jobs['interval']} {jobs['unit']}")
 
-
 while True:
     schedule.run_pending()
-    time.sleep(2)
+    time.sleep(1)

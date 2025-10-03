@@ -21,11 +21,21 @@ except Exception as e:
 
 def load_data(df, db_params):
     try:    
-        with my_connection(db_params) as conn:
-
+        conn = my_connection(db_params)
+        if not conn:
+            print("Conexão inválida. Encerrando processo de carga.")
+            return
+        with conn:
             with conn.cursor() as cur:
-
                 for _, row in df.iterrows():
+                    cur.execute("SELECT nome_produto FROM produto WHERE nome_produto = %s;", (row['nome'],))
+                    produto_existente = cur.fetchone()
+
+                    if produto_existente:
+                        print(f"Produto '{row['nome']}' já existe. Pulando inserção.")
+                        continue
+
+                   
                     #Inserindo dados na tabela 'Categoria'
                     cur.execute("""
                     INSERT INTO categoria(nome)
@@ -34,15 +44,9 @@ def load_data(df, db_params):
                                 """, (row['categoria'],)
                                 )
                     id_categoria = cur.fetchone()[0] 
-                    
-                    #Validação por descrição do produto para evitar duplicidade
-                    cur.execute("select nome_produto from produto where nome_produto = %s", (row['nome'],))
-                    produto_existente = cur.fetchone()
-                    
-                    if produto_existente:
-                        print(f"Produto já existente... inserção ignorada.")
-                        continue
 
+                  
+                    
                     #Inserindo dados na tabela 'Produto'
                     cur.execute("""
                     INSERT INTO produto(codigo, nome_produto, descricao, preco_base, preco_promocional, id_categoria)

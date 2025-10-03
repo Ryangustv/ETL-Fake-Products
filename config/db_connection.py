@@ -1,7 +1,7 @@
 import psycopg2 as pg 
 
 DB_PARAM = {
-        'database':"ETL basic",
+        'database':"ETL_Products",
         'host':"localhost",
         'port':"5432",
         'user':"postgres",
@@ -9,10 +9,11 @@ DB_PARAM = {
     }
 
 def my_connection(db_params):
-    try:
+    try:   
         conn = pg.connect(**DB_PARAM)
+        print("Conexão com banco de dados realizada com sucesso!")
         return conn
     except pg.Error as e:
         print(f"Erro ao conectar com banco de dados: {e}")
         return None
-    
+
